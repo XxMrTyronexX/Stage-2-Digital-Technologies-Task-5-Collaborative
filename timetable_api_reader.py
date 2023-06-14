@@ -74,15 +74,7 @@ s12 = s11.replace('}"', '},"')
 #converting our reformatted string into a json file (we can read it like a bunch of nested dictioionaries)
 bus_data = json.loads(s12)
 
-#getting value inside of multiple arrays and printing
-#print(bus_data["sussy"]["blue"]["one"])
-
-#looping through one of the arrays in the json string and printing it
-'''for i in bus_data["entity"]:
-    print(i)
-'''
 #.keys loops throgh the dictionary keys and .items loops through what is in the keys
-
 for item in bus_data.keys():
 
     if item.__contains__('entity'):
