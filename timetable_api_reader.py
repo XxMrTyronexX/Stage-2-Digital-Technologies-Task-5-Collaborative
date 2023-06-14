@@ -74,18 +74,48 @@ s12 = s11.replace('}"', '},"')
 #converting our reformatted string into a json file (we can read it like a bunch of nested dictioionaries)
 bus_data = json.loads(s12)
 
-#getting value inside of multiple arrays and printing
-#print(bus_data["sussy"]["blue"]["one"])
-
-#looping through one of the arrays in the json string and printing it
-'''for i in bus_data["entity"]:
-    print(i)
-'''
 #.keys loops throgh the dictionary keys and .items loops through what is in the keys
 
+
+#function to get all of the latitude and longitude coordinates of the busses with the number the user enters as a series of tuples inside of a list
+def get_bus_location(bus_name: str) -> list[tuple]:
+
+    #list to store the the bus coordinates as
+    list_of_busses = []
+
+    #loops through all of the entities
+    for item in bus_data.keys():
+
+        #if the key is an entitiy (if entities are bus entries)
+        if item.__contains__('entity'):
+
+            #if the currently selected bus matches the route number that the user has entered
+            if bus_data[item]["vehicle"]["trip"]["route_id"] == bus_name:
+
+                #add the coordinates to a tuple as a float
+                temporary_tuple = (float(bus_data[item]["vehicle"]["position"]["latitude"]), float(bus_data[item]["vehicle"]["position"]["longitude"]))
+
+                #add the tuple to the list 
+                list_of_busses.append(temporary_tuple)
+
+    return list_of_busses
+
+
+while True:
+    user_input = input("Type the bus that you would like the coordinates of: ")
+
+    print(get_bus_location(user_input))
+
+    user_input2 = input("Again?")
+
+    if user_input2 == "n":
+        break
+
+'''
 for item in bus_data.keys():
 
     if item.__contains__('entity'):
         print(bus_data[item]["vehicle"]["trip"]["route_id"])
         print("latitude: " + bus_data[item]["vehicle"]["position"]["latitude"])
         print("longitude: " + bus_data[item]["vehicle"]["position"]["longitude"]+"\n")
+'''
