@@ -86,14 +86,14 @@ def get_bus_location(bus_name: str) -> list[tuple]:
     #loops through all of the entities
     for item in bus_data.keys():
 
-        #if the key is an entitiy (if entities are bus entries)
+        #if the key is for an entitiy (entities are bus entries)
         if item.__contains__('entity'):
 
             #if the currently selected bus matches the route number that the user has entered
             if bus_data[item]["vehicle"]["trip"]["route_id"] == bus_name:
 
                 #add the coordinates to a tuple as a float
-                temporary_tuple = (float(bus_data[item]["vehicle"]["position"]["latitude"]), float(bus_data[item]["vehicle"]["position"]["longitude"]))
+                temporary_tuple = (bus_data[item]["id"], float(bus_data[item]["vehicle"]["position"]["latitude"]), float(bus_data[item]["vehicle"]["position"]["longitude"]))
 
                 #add the tuple to the list 
                 list_of_busses.append(temporary_tuple)
@@ -101,10 +101,57 @@ def get_bus_location(bus_name: str) -> list[tuple]:
     return list_of_busses
 
 
+#uses the bus ID to determine if it has wheelchair acceess
+def wheelchair_access (bus_id: str) -> bool:
+
+    for item in bus_data.keys():
+
+        if item.__contains__('entity'):
+
+            if bus_data[item]["id"] == bus_id:
+
+                if bus_data[item]["vehicle"]["vehicle"]["transit_realtime.tfnsw_vehicle_descriptor"]["wheelchair_accessible"] == "1":
+                    return True
+
+                else if bus_data[item]["vehicle"]["vehicle"]["transit_realtime.tfnsw_vehicle_descriptor"]["wheelchair_accessible"] == "0":
+                    return False
+                
+
+#uses the bus ID to determine if it has air conditioning
+def air_conditioned (bus_id: str) -> bool:
+
+    for item in bus_data.keys():
+        
+        if item.__contains__('entity'):
+            
+            if bus_data[item]["id"] == bus_id:
+                
+                if bus_data[item]["vehicle"]["vehicle"]["transit_realtime.tfnsw_vehicle_descriptor"]["air_conditioned"] == "true":
+                    return True
+
+                else if bus_data[item]["vehicle"]["vehicle"]["transit_realtime.tfnsw_vehicle_descriptor"]["air_conditioned"] == "false":
+                    return False
+
+
+#uses the bus ID to check the bus speed
+def bus_speed (bus_id: str) -> float:
+
+    #loops through all of the entities
+    for item in bus_data.keys():
+
+        if item.__contains__('entity'):
+
+            if bus_data[item]["id"] == bus_id:
+
+                return float(bus_data[item]["vehicle"]["position"]["speed"])
+
+                    
+    
+
 while True:
     user_input = input("Type the bus that you would like the coordinates of: ")
 
-    print(get_bus_location(user_input))
+    print(get_bus_location(user_input)
 
     user_input2 = input("Again?")
 
