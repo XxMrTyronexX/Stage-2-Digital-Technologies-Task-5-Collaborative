@@ -4,6 +4,7 @@ import os
 import re
 import linecache
 import io
+from datetime import datetime
 
 #putting URL containing bus data inside of requests object
 r1 = requests.get("https://gtfs.adelaidemetro.com.au/v1/realtime/vehicle_positions/debug")
@@ -134,30 +135,6 @@ service_alert_data = json.loads(service_alerts35)
 
 #.keys loops throgh the dictionary keys and .items loops through what is in the keys
 
-#function to get all of the latitude and longitude coordinates of the busses with the number the user enters as a series of tuples inside of a list
-def get_bus_location(bus_name: str) -> list[tuple]:
-
-    #list to store the the bus coordinates as
-    list_of_busses = []
-    
-    #loops through all of the entities
-    for item in bus_position_data.keys():
-        
-        #if the key is for an entitiy (entities are bus entries)
-        if item.__contains__('entity'):
-
-            #if the currently selected bus matches the route number that the user has entered
-            if bus_position_data[item]["vehicle"]["trip"]["route_id"] == bus_name:
-                
-                #add the coordinates to a tuple as a float
-                temporary_tuple = (bus_position_data[item]["id"], float(bus_position_data[item]["vehicle"]["position"]["latitude"]), float(bus_position_data[item]["vehicle"]["position"]["longitude"]))
-
-                #add the tuple to the list 
-                list_of_busses.append(temporary_tuple)
-
-    return list_of_busses
-
-
 #uses the bus ID to determine if it has wheelchair acceess
 def wheelchair_access (bus_id: str) -> bool:
 
@@ -201,9 +178,123 @@ def bus_speed (bus_id: str) -> float:
             if bus_position_data[item]["id"] == bus_id:
 
                 return float(bus_position_data[item]["vehicle"]["position"]["speed"])
+            
+#function to get all of the latitude and longitude coordinates of the busses with the number the user enters as a series of tuples inside of a list
+def get_bus_location(bus_name: str) -> dict:
 
+    #list to store the the bus coordinates as
+    list_of_busses = []
+    
+    for item in bus_position_data.keys():
+        
+        if item.__contains__('entity'):
+
+            if bus_position_data[item]["vehicle"]["trip"]["route_id"] == bus_name:
+                
+                temporary_dictionary = {
+                    "latitude" : float(bus_position_data[item]["vehicle"]["position"]["latitude"]), 
+                    "longitude" : float(bus_position_data[item]["vehicle"]["position"]["longitude"])
+                    }
+                
+                list_of_busses.append(temporary_dictionary)
+
+    return json.dumps(list_of_busses)
+
+
+#function to get all of the latitude and longitude coordinates of the busses with the number the user enters as a series of tuples inside of a list
+def get_bus_location(bus_name: str, ac: bool, wa: bool) -> dict:
+
+    #list to store the the bus coordinates as
+    list_of_busses = []
+    
+    #loops through all of the entities
+    for item in bus_position_data.keys():
+        
+        #if the key is for an entitiy (entities are bus entries)
+        if item.__contains__('entity'):
+
+            #if the currently selected bus matches the route number that the user has entered
+            if bus_position_data[item]["vehicle"]["trip"]["route_id"] == bus_name:
+                
+                #checking if the bus has wheelchair access and airconditioning and returns all of the busses that do or dont based on the user request
+                if(wheelchair_access((bus_position_data[item]["id"])) == wa and air_conditioned((bus_position_data[item]["id"])) == ac):
+
+                    temporary_dictionary = {
+                        "latitude" : float(bus_position_data[item]["vehicle"]["position"]["latitude"]), 
+                        "longitude" : float(bus_position_data[item]["vehicle"]["position"]["longitude"])
+                        }
                     
+                    list_of_busses.append(temporary_dictionary)
 
+    return json.dumps(list_of_busses)
+
+
+#method to get the bus alerts
+def get_alerts() -> list:
+
+    list_of_alerts = []
+
+    #looping through all of the keys in json containing the alerts
+    for busses in service_alert_data.keys():
+        
+        #initializing variables (this is done inside of the loop so they are reset for each iteration)
+        effected_busses = ""
+        header = ""
+        body = ""
+        start_period = ""
+
+        #if the currently selected key contains entity (meaning that it is an alert and not a header)
+        if busses.__contains__('entity'):
+
+            #for each entry inside of an alert (there will always only be 1 alert in an entity)
+            for entries in service_alert_data[busses]["alert"]:
+
+                #if the selected entry is the active period, get the start time (which returns a unix time) and convert it to Adelaide time
+                if entries == "active_period":
+                    for times in service_alert_data[busses]["alert"][entries]:
+                        start_period = datetime.utcfromtimestamp(int(service_alert_data[busses]["alert"][entries][times])).strftime('%Y-%m-%d %H:%M:%S')
+                
+                #if the selected entry is an informed entity (meaning that it is a bus effected by the alert) append it a string of busses effected
+                if entries.__contains__('informed_entity'):
+                    effected_busses = effected_busses + ", " + service_alert_data[busses]["alert"][entries]["route_id"]
+
+                #if the selected entry part of the header, get the text part of it
+                if entries == "header_text":
+                    header = service_alert_data[busses]["alert"][entries]["translation"]["text"]
+
+                #if the entry is the description of the text, get the text part of it
+                if entries.__contains__("description_text"):
+                    body = service_alert_data[busses]["alert"][entries]["translation"]["text"]
+            
+            #creating a dictionary with the values we want from the currently selected entity
+            temporary_dictionary = {
+            "title" : header, 
+            "content" : body + "<br><br>" + "Start date: " + start_period + "<br><br>" + "Busses affected: " + effected_busses[2:]
+            }
+            
+            #appending it to an array we will use to store all of the alerts
+            list_of_alerts.append(temporary_dictionary)
+
+    
+    return list_of_alerts
+                
+            
+print(get_alerts()[2]["content"])
+
+'''
+while True:
+    user_input = input("Type the bus that you would like the coordinates of: ")
+    user_input1 = True if input("air_conditioned?: ") == "true" else False
+    user_input2 = True if input("wheelchair access?: ") == "true" else False
+
+    print(get_bus_location(user_input, user_input1, user_input2))
+
+    user_input2 = input("Again?")
+
+    if user_input2 == "n":
+        break
+
+'''
 '''
 for item in bus_position_data.keys():
 
