@@ -23,7 +23,7 @@
                     @apply  w-full h-[6.667vh] flex;
                 }
                 .content-container {
-                    @apply  w-full h-full flex flex-col flex-grow items-center
+                    @apply  w-full h-full flex flex-col flex-grow items-center overflow-y-auto
                             border-black border-x-2 border-b-2;
                 }
 
@@ -84,9 +84,13 @@
                     <img src="https://web.archive.org/web/20091028103820/http://geocities.com/rockm59/bus.gif">
                 </marquee>
             </div>
-            <div id="tab-2" style="display:none" class="tab max-w-4xl">
+            <div id="tab-2" style="display:none" class="tab max-w-full mx-80 max-h-[68vh] relative overflow-y-auto">
                 <br>
-                <h1 class='font-sans text-5xl font-bold'>Service Alerts</h1>
+                <div class="flex items-center">
+                    <img class="mr-4" src="../static/warning1.gif">
+                    <h1 class='font-sans text-5xl font-bold'>Service Alerts</h1>
+                    <img class="mr-1" src="../static/warning1.gif">
+                </div>
                 <br>
             </div>
         </div>

@@ -214,7 +214,7 @@ def get_bus_location(bus_name: str, ac: bool, wa: bool) -> dict:
         if item.__contains__('entity'):
 
             #if the currently selected bus matches the route number that the user has entered
-            if bus_position_data[item]["vehicle"]["trip"]["route_id"] == bus_name:
+            if bus_position_data[item]["vehicle"]["trip"]["route_id"] == bus_name or bus_name == "":
                 
                 #checking if the bus has wheelchair access and airconditioning and returns all of the busses that do or dont based on the user request
                 if (wa and not wheelchair_access((bus_position_data[item]["id"]))) or (ac and not air_conditioned((bus_position_data[item]["id"]))):

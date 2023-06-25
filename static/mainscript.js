@@ -4,7 +4,7 @@ function refreshAlerts() {
     .then(response => response.json())
     .then(data => {
         alertsTab = document.getElementById("tab-2");
-        alertsTab.innerHTML = "<br><h1 class='font-sans text-5xl font-bold'>Service Alerts</h1><br>";
+        //alertsTab.innerHTML = "<br><h1 class='font-sans text-5xl font-bold'>Service Alerts</h1><br>";
 
         for (let i = 0; i < data["alerts"].length; i++) {
             let alertHTML = `<h3>${data["alerts"][i]["title"]}</h3><p>${data["alerts"][i]["content"]}</p><br>`;
@@ -39,7 +39,6 @@ function updateMap() {
     .then(data => {
         // Converting the busses into markers
         markers = "";
-        console.log(data);
         for (let i = 0; i < data["busses"].length; i++) {
             markers += `&markers=color:blue|${data["busses"][i]["latitude"]},${data["busses"][i]["longitude"]}|`;
         }
