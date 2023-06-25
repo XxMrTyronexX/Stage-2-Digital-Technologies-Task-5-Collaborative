@@ -217,16 +217,17 @@ def get_bus_location(bus_name: str, ac: bool, wa: bool) -> dict:
             if bus_position_data[item]["vehicle"]["trip"]["route_id"] == bus_name:
                 
                 #checking if the bus has wheelchair access and airconditioning and returns all of the busses that do or dont based on the user request
-                if(wheelchair_access((bus_position_data[item]["id"])) == wa and air_conditioned((bus_position_data[item]["id"])) == ac):
+                if (wa and not wheelchair_access((bus_position_data[item]["id"]))) or (ac and not air_conditioned((bus_position_data[item]["id"]))):
+                    continue
 
-                    temporary_dictionary = {
-                        "latitude" : float(bus_position_data[item]["vehicle"]["position"]["latitude"]), 
-                        "longitude" : float(bus_position_data[item]["vehicle"]["position"]["longitude"])
-                        }
-                    
-                    list_of_busses.append(temporary_dictionary)
+                temporary_dictionary = {
+                    "latitude" : float(bus_position_data[item]["vehicle"]["position"]["latitude"]), 
+                    "longitude" : float(bus_position_data[item]["vehicle"]["position"]["longitude"])
+                    }
+                
+                list_of_busses.append(temporary_dictionary)
 
-    return json.dumps(list_of_busses)
+    return list_of_busses
 
 
 #method to get the bus alerts

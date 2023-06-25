@@ -7,41 +7,19 @@ app = flask.Flask(__name__)
 
 @app.route("/alerts")
 def alerts():
-    sample_json = {
-        "alerts": [
-            {
-                "title": "Alert 1",
-                "content": "This is the first alert"
-            },
-            {
-                "title": "Alert poo",
-                "content": "asdfdsa fadlk;dsfl;kdsalfnsf;ldn;k jdf;k ;k  kfd lksfdg lkl"
-            }
-        ]
-    }
-    return json.dumps(sample_json)
+    metro_alerts = timetable.get_alerts()
+    return json.dumps({"alerts": metro_alerts[::-1]})
 
 @app.route("/route", methods=["POST"])
 def routes():
     request_data = flask.request.get_json()
     
-    # Get the route shit here
+    route = request_data["route"]
+    wheelchair = request_data["wheelchair"]
+    aircon = request_data["aircon"]
     
-    sample_json = {
-        "busses": [
-            {
-                "latitude": "-34.924164070184126",
-                "longitude": "138.60093358259886"
-            },
-            {
-                "latitude": "-34.824164070184126",
-                "longitude": "138.60093358259886"
-            }
-        ]
-    }
-    print("Route request")
-    
-    return json.dumps(sample_json)
+    bus_locations = timetable.get_bus_location(route, aircon, wheelchair)
+    return json.dumps({"busses": bus_locations})
 
 @app.route('/')
 def index():

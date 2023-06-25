@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Adelaide Metro</title>
         <script src="../static/tailwind.js"></script>
-        <script src="../static/map.js"></script>
+        <script src="../static/mainscript.js"></script>
         <style type="text/tailwindcss">
             @layer components {
                 .top-bar {
@@ -76,7 +76,7 @@
                             </button>
                         </td>
                         <td class="img-td">
-                            <img id="map">
+                            <img id="map" src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDocN5FdpANWDjJhfctCaqNgF-JNuZIAUE&size=500x350&zoom=11&center=-34.924164070184126,138.60093358259886">
                         </td>
                     </tr>
                 </table>
@@ -88,64 +88,7 @@
                 <br>
                 <h1 class='font-sans text-5xl font-bold'>Service Alerts</h1>
                 <br>
-                <!--<h3>Service alert 1</h3>
-                <p>The alert text goes here</p>
-                <br>
-                <h3>Service alert 2</h3>
-                <p>Sequel gaming</p>
-                <br>
-                <h3>Service alert 3</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed orci orci, sodales vel tellus et, pretium porttitor dolor. Nunc scelerisque cursus sem. Sed imperdiet cursus mauris a efficitur. Vivamus tempor at sem non elementum. Integer non rhoncus lacus. Donec sem mi, egestas quis pretium non, vehicula sit amet quam. Aenean sit amet arcu congue, dictum metus eget, rhoncus ipsum. Vestibulum volutpat, nisl ut vestibulum mattis, odio nibh tempus neque, et hendrerit urna sapien eu sapien. Pellentesque molestie lectus eu lectus tempor, at placerat leo vehicula. Mauris augue sapien, tincidunt nec lorem gravida, venenatis dictum turpis. Sed sodales pellentesque scelerisque. Cras pretium massa ut leo feugiat, vitae ullamcorper elit lacinia. Proin ut turpis elementum, ornare risus non, ullamcorper velit.
-
-                    Proin consequat diam eros, sed porta diam ultrices vitae. Integer ullamcorper leo quis nunc tristique, non aliquet magna mollis. Proin laoreet pellentesque justo non porttitor. Cras neque ipsum, fermentum non ultrices in, ultricies vitae libero. In non semper diam. Fusce viverra gravida ultrices. Quisque convallis risus quis nisl scelerisque tincidunt.
-                    
-                    Nam finibus leo justo, in congue mi finibus quis. Nunc quis posuere quam. Sed accumsan non lorem non scelerisque. Mauris dapibus consequat lectus, non blandit lorem lacinia at. Proin interdum lacus mauris, at porta elit consectetur sit amet. Maecenas lectus lorem, pulvinar at porttitor et, commodo eu mauris. Maecenas turpis mauris, pretium vitae urna quis, imperdiet fringilla libero.
-                    
-                    Aenean sed aliquet justo. Maecenas nec quam sit amet leo mattis pulvinar. Maecenas faucibus lorem nibh, eu tempor diam fermentum eu. Donec lorem urna, gravida vel nibh eget, bibendum convallis velit. Donec metus est, semper non commodo in, interdum eu est. Integer ultricies ex ex, et porttitor sem elementum vel. Maecenas a euismod erat, ut varius leo. Fusce eget nunc nec nisl volutpat bibendum ut eget nisl. Pellentesque pulvinar sem dolor, eget aliquam nibh lacinia at.
-                    
-                    Integer purus mauris, efficitur nec lacinia quis, malesuada sed orci. Cras vulputate fermentum risus, ac gravida velit pulvinar a. In sodales lectus eu nisi malesuada, id dictum turpis euismod. Sed posuere ante tellus, ac aliquam sapien fringilla eget. Donec commodo dui a lorem dapibus varius. Ut ultrices molestie diam sed scelerisque. Donec mollis mollis ligula, ac suscipit nibh viverra vitae. Aliquam erat volutpat. Nullam gravida lacinia finibus. Sed condimentum, ante molestie commodo sollicitudin, lacus dolor finibus elit, in volutpat sapien mi at turpis. Nunc hendrerit justo ullamcorper arcu suscipit, eu imperdiet mi suscipit. Phasellus dolor nunc, euismod in enim ac, mattis pellentesque libero. Integer mi mi, aliquet et nisl sed, feugiat viverra est. Cras ultricies ipsum justo, ac vehicula odio tincidunt a. Suspendisse enim urna, maximus a metus sit amet, sodales aliquam risus. Cras dignissim est finibus augue placerat maximus.</p>
-                <br>-->
             </div>
         </div>
-
-        <script>
-            // Alerts refresh function
-            function refreshAlerts() {
-                fetch("/alerts")
-                .then(response => response.json())
-                .then(data => {
-                    alertsTab = document.getElementById("tab-2");
-                    alertsTab.innerHTML = "<br><h1 class='font-sans text-5xl font-bold'>Service Alerts</h1><br>";
-
-                    for (let i = 0; i < data["alerts"].length; i++) {
-                        let alertHTML = `<h3>${data["alerts"][i]["title"]}</h3><p>${data["alerts"][i]["content"]}</p><br>`;
-                        alertsTab.innerHTML += alertHTML;
-                    }
-                })
-                .catch(error => console.log(error));
-            }
-            refreshAlerts();
-            alertInterval = setInterval(refreshAlerts, 10000); // 10 seconds
-
-            // Tab script
-            function changeTab(button, tabNum) {
-                // Adding a border to the bottom of all tabs
-                let allTabButtons = document.getElementsByClassName("tab-button");
-                for (let i = 0; i < allTabButtons.length; i++)
-                    allTabButtons[i].style.borderBottomWidth = "2px";
-
-                // Disabling the bottom border on this button
-                button.style.borderBottomWidth = "0px";
-
-                // Loop through each tab and hiding it
-                let allTabs = document.getElementsByClassName("tab");
-                for (let i = 0; i < allTabs.length; i++)
-                    allTabs[i].style.display = "none";
-
-                // Finally set the tab we want's visibility to block
-                let tab = document.getElementById("tab-" + tabNum);
-                tab.style.display = "block";
-            }
-        </script>
     </body>
 </html>
