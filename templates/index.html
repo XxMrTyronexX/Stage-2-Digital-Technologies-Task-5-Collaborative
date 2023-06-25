@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Adelaide Metro</title>
         <script src="../static/tailwind.js"></script>
+        <script src="../static/map.js"></script>
         <style type="text/tailwindcss">
             @layer components {
                 .top-bar {
@@ -39,6 +40,9 @@
                             hover:bg-gray-200 active:bg-gray-400
                             border-black border-l-2 border-r-2;
                 }
+                h3 {
+                    @apply  font-sans text-3xl font-bold;
+                }
             }
         </style>
     </head>
@@ -58,8 +62,8 @@
                 <table class="border border-black h-92 w-[55rem]">
                     <tr>
                         <td class="config-td" style="text-align: center; vertical-align: top;">
-                            <h1 class='font-sans text-lg font-bold'>Config</h1><br>
-                            <p>Bus Route:&nbsp;&nbsp;<input type="text" value="" class="border-black border rounded-md w-[5ch]"></p>
+                            <h2 class="font-sans text-lg font-bold">Config</h2><br>
+                            <p>Bus Route:&nbsp;&nbsp;<input id="route" type="text" value="" class="border-black border rounded-md w-[5ch]"></p>
                             <br>
                             <label for="wheelchairCheck">Only Wheelchair Accessable</label>
                             <input type="checkbox" id="wheelchairCheck" name="wheelchairCheck">
@@ -67,12 +71,12 @@
                             <label for="airconCheck">Only Air Conditioned</label>
                             <input type="checkbox" id="airconCheck" name="airconCheck">
                             <br><br>
-                            <button class="w-11/12 h-24 bg-gray-200 hover:bg-gray-300 active:bg-gray-400 rounded-3xl">
+                            <button onClick="updateMap();" class="w-11/12 h-24 bg-gray-200 hover:bg-gray-300 active:bg-gray-400 rounded-3xl">
                                 <h1 class='font-sans text-xl'>See Busses</h1>
                             </button>
                         </td>
                         <td class="img-td">
-                            <img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyDocN5FdpANWDjJhfctCaqNgF-JNuZIAUE&size=500x350&zoom=16&center=-34.924164070184126,138.60093358259886&markers=color:green|-34.924164070184126,138.60093358259886&markers=color:blue|-34.924164070184126,138.60093358259886&path=color:blue|weight:5|-34.924164070184126,138.60422046066302|-34.92333128611683,138.60405958940007|-34.922580020756385,138.60359272281121|-34.92198381319065,138.60286556105106|-34.921601024370176,138.60194928377913|-34.921469124331765,138.60093358259886|-34.921601024370176,138.59991788141858|-34.92198381319065,138.59900160414665|-34.922580020756385,138.5982744423865|-34.92333128611683,138.59780757579765|-34.924164070184126,138.5976467045347|-34.924996854251425,138.59780757579765|-34.92574811961187,138.5982744423865|-34.9263443271776,138.59900160414665|-34.92672711599808,138.59991788141858|-34.92685901603649,138.60093358259886|-34.92672711599808,138.60194928377913|-34.9263443271776,138.60286556105106|-34.92574811961187,138.60359272281121|-34.924996854251425,138.60405958940007|-34.924164070184126,138.60422046066302">
+                            <img id="map">
                         </td>
                     </tr>
                 </table>
@@ -80,12 +84,50 @@
                     <img src="https://web.archive.org/web/20091028103820/http://geocities.com/rockm59/bus.gif">
                 </marquee>
             </div>
-            <div id="tab-2" style="display:none" class="tab">
-                Ghjkl
+            <div id="tab-2" style="display:none" class="tab max-w-4xl">
+                <br>
+                <h1 class='font-sans text-5xl font-bold'>Service Alerts</h1>
+                <br>
+                <!--<h3>Service alert 1</h3>
+                <p>The alert text goes here</p>
+                <br>
+                <h3>Service alert 2</h3>
+                <p>Sequel gaming</p>
+                <br>
+                <h3>Service alert 3</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed orci orci, sodales vel tellus et, pretium porttitor dolor. Nunc scelerisque cursus sem. Sed imperdiet cursus mauris a efficitur. Vivamus tempor at sem non elementum. Integer non rhoncus lacus. Donec sem mi, egestas quis pretium non, vehicula sit amet quam. Aenean sit amet arcu congue, dictum metus eget, rhoncus ipsum. Vestibulum volutpat, nisl ut vestibulum mattis, odio nibh tempus neque, et hendrerit urna sapien eu sapien. Pellentesque molestie lectus eu lectus tempor, at placerat leo vehicula. Mauris augue sapien, tincidunt nec lorem gravida, venenatis dictum turpis. Sed sodales pellentesque scelerisque. Cras pretium massa ut leo feugiat, vitae ullamcorper elit lacinia. Proin ut turpis elementum, ornare risus non, ullamcorper velit.
+
+                    Proin consequat diam eros, sed porta diam ultrices vitae. Integer ullamcorper leo quis nunc tristique, non aliquet magna mollis. Proin laoreet pellentesque justo non porttitor. Cras neque ipsum, fermentum non ultrices in, ultricies vitae libero. In non semper diam. Fusce viverra gravida ultrices. Quisque convallis risus quis nisl scelerisque tincidunt.
+                    
+                    Nam finibus leo justo, in congue mi finibus quis. Nunc quis posuere quam. Sed accumsan non lorem non scelerisque. Mauris dapibus consequat lectus, non blandit lorem lacinia at. Proin interdum lacus mauris, at porta elit consectetur sit amet. Maecenas lectus lorem, pulvinar at porttitor et, commodo eu mauris. Maecenas turpis mauris, pretium vitae urna quis, imperdiet fringilla libero.
+                    
+                    Aenean sed aliquet justo. Maecenas nec quam sit amet leo mattis pulvinar. Maecenas faucibus lorem nibh, eu tempor diam fermentum eu. Donec lorem urna, gravida vel nibh eget, bibendum convallis velit. Donec metus est, semper non commodo in, interdum eu est. Integer ultricies ex ex, et porttitor sem elementum vel. Maecenas a euismod erat, ut varius leo. Fusce eget nunc nec nisl volutpat bibendum ut eget nisl. Pellentesque pulvinar sem dolor, eget aliquam nibh lacinia at.
+                    
+                    Integer purus mauris, efficitur nec lacinia quis, malesuada sed orci. Cras vulputate fermentum risus, ac gravida velit pulvinar a. In sodales lectus eu nisi malesuada, id dictum turpis euismod. Sed posuere ante tellus, ac aliquam sapien fringilla eget. Donec commodo dui a lorem dapibus varius. Ut ultrices molestie diam sed scelerisque. Donec mollis mollis ligula, ac suscipit nibh viverra vitae. Aliquam erat volutpat. Nullam gravida lacinia finibus. Sed condimentum, ante molestie commodo sollicitudin, lacus dolor finibus elit, in volutpat sapien mi at turpis. Nunc hendrerit justo ullamcorper arcu suscipit, eu imperdiet mi suscipit. Phasellus dolor nunc, euismod in enim ac, mattis pellentesque libero. Integer mi mi, aliquet et nisl sed, feugiat viverra est. Cras ultricies ipsum justo, ac vehicula odio tincidunt a. Suspendisse enim urna, maximus a metus sit amet, sodales aliquam risus. Cras dignissim est finibus augue placerat maximus.</p>
+                <br>-->
             </div>
         </div>
 
         <script>
+            // Alerts refresh function
+            function refreshAlerts() {
+                fetch("/alerts")
+                .then(response => response.json())
+                .then(data => {
+                    alertsTab = document.getElementById("tab-2");
+                    alertsTab.innerHTML = "<br><h1 class='font-sans text-5xl font-bold'>Service Alerts</h1><br>";
+
+                    for (let i = 0; i < data["alerts"].length; i++) {
+                        let alertHTML = `<h3>${data["alerts"][i]["title"]}</h3><p>${data["alerts"][i]["content"]}</p><br>`;
+                        alertsTab.innerHTML += alertHTML;
+                    }
+                })
+                .catch(error => console.log(error));
+            }
+            refreshAlerts();
+            alertInterval = setInterval(refreshAlerts, 10000); // 10 seconds
+
+            // Tab script
             function changeTab(button, tabNum) {
                 // Adding a border to the bottom of all tabs
                 let allTabButtons = document.getElementsByClassName("tab-button");

@@ -203,17 +203,6 @@ def bus_speed (bus_id: str) -> float:
                 return float(bus_position_data[item]["vehicle"]["position"]["speed"])
 
                     
-    
-
-while True:
-    user_input = input("Type the bus that you would like the coordinates of: ")
-
-    print(get_bus_location(user_input))
-
-    user_input2 = input("Again?")
-
-    if user_input2 == "n":
-        break
 
 '''
 for item in bus_position_data.keys():
